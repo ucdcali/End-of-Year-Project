@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Refactor App</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <h1>Messages</h1>
+
+  <form action="/messages" method="POST">
+    <input name="message" placeholder="New message">
+    <button>Add</button>
+  </form>
+
+  <ul>
+    <% messages.forEach(m => { %>
+      <li>
+        <%= m.message %>
+        <form action="/messages/delete/<%= m._id %>" method="POST" style="display:inline;">
+          <button>Delete</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+
+  <hr>
+
+  <h1>Users</h1>
+
+  <form action="/users" method="POST">
+    <input name="name" placeholder="New user">
+    <button>Add</button>
+  </form>
+
+  <ul>
+    <% users.forEach(u => { %>
+      <li>
+        <%= u.name %>
+        <form action="/users/delete/<%= u._id %>" method="POST" style="display:inline;">
+          <button>Delete</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+
+</body>
+</html>
