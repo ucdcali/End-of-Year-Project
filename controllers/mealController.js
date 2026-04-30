@@ -25,7 +25,6 @@ export const adminPage = async (req, res, next) => {
     // res.json(meals[1])
     // }
     res.json(meals[1])
-    }
     res.render('index', {
     title: "Commons App",
     meals
