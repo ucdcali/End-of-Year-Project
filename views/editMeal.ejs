@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Menu</title>
+    <link rel="stylesheet" href="../public/styles.css" />
+  </head>
+  <body>
+    <section id="addMenuItem">
+      <h1>Add Menu Item</h1>
+
+      <form action="/admin/create" method="post">
+        <ul>
+          <li>
+            <label for="mealTitle">title</label>
+            <input id="mealTitle" type="text" name="mealTitle" />
+          </li>
+          <!-- change to image upload instead of url -->
+          <li>
+            <label for="mealImg">image url</label>
+            <input id="mealImg" type="url" name="mealImg" />
+          </li>
+          <li>
+            <label for="mealDiet">dietary restrictions</label>
+            <ul>
+              <li>
+                <label for="mealDiet-V">vegan</label>
+                <input id="mealDiet-V" type="checkbox" name="mealDiet-V" />
+              </li>
+              <li>
+                <label for="mealDiet-VG">vegetarian</label>
+                <input id="mealDiet-VG" type="checkbox" name="mealDiet-VG" />
+              </li>
+              <li>
+                <label for="mealDiet-GF">gluten-free</label>
+                <input id="mealDiet-GF" type="checkbox" name="mealDiet-GF" />
+              </li>
+              <li>
+                <label for="mealDiet-DF">dairy-free</label>
+                <input id="mealDiet-DF" type="checkbox" name="mealDiet-DF" />
+              </li>
+              <li>
+                <label for="mealDiet-NF">nut-free</label>
+                <input id="mealDiet-NF" type="checkbox" name="mealDiet-NF" />
+              </li>
+            </ul>
+          </li>
+          <li>
+            <input type="submit" value="submit" />
+          </li>
+        </ul>
+
+        <!-- title, image, diet-->
+      </form>
+    </section>
+    <section id="editMenuItem"></section>
+  </body>
+</html>

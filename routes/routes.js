@@ -9,6 +9,7 @@ router.get('/', async (req, res, next) => {
         const meals = await Meal.find()
         //console.log(meals)
         res.json(meals[1])
+        res.render("index", { meals });
     }
     catch (err) {
         next(err)
