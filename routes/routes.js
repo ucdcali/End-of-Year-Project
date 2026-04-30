@@ -2,7 +2,8 @@ import express from "express";
 import * as mealController from "../controllers/mealController.js";
 import { Meal } from "../models/Meal.js";
 export const router = express.Router();
-//import { Menu } from '../models/Menu.js'
+import { Menu } from '../models/Menu.js'
+
 
 
 //homepage
