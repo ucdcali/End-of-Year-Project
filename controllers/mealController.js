@@ -20,14 +20,14 @@ export const homePage = async (req, res, next) => {
 
 export const adminPage = async (req, res, next) => {
   try{
-  const meals = await Meal.find()
-    if (date = meals.date) {
-    res.json(meals[1])
-    }
-    res.render('index', {
-    title: "Commons App",
-    meals
-    })
+    const meals = await Meal.find();
+    // if (date = meals.date) {
+    // res.json(meals[1])
+    // }
+    res.render("index", {
+      title: "Commons App",
+      meals,
+    });
   }
     catch (err) {
         next(err)
