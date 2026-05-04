@@ -1,6 +1,8 @@
 import { Meal } from '../models/Meal.js'
 //import { Menu } from '../models/Menu.js'
 
+const DIET = ['V', 'VG', 'GF', 'DF', 'NF'];
+
 export const homePage = async (req, res) => {
     try {
       res.redirect("/admin")
@@ -25,7 +27,7 @@ export const adminPage = async (req, res, next) => {
     // if (date = meals.date) {
     // res.json(meals[1])
     // }
-    // res.json(meals[1])
+    //// res.json(meals[1])
     res.render('index', {
     title: "Commons App",
    meals

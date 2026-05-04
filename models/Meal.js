@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 const mealSchema = new mongoose.Schema({
   title: String,
-  diet: String,
+  diet: { String,
+  enum: ['V', 'VG', 'GF', 'DF', 'NF']
+  },
   img: String,
 });
 
