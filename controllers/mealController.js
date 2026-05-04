@@ -1,7 +1,7 @@
 import { Meal } from '../models/Meal.js'
 //import { Menu } from '../models/Menu.js'
 
-export const homePage = async (req, res, next) => {
+export const homePage = async (req, res) => {
     try {
       res.redirect("/admin")
         // const meals = await Meal.find()
