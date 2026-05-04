@@ -1,4 +1,4 @@
-import User from '../models/User.js'
+import { User } from '../models/User.js'
 // Login form
 export const loginPage = async (req, res) => {
   res.render('auth/login', { error: null, form: {} });
