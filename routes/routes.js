@@ -16,3 +16,10 @@ router.post("/admin/create", mealController.createMeal);
 router.post("/admin/edit/:id", mealController.editMeal);
 //delet a meal
 router.post("/admin/delete/:id", mealController.deleteMeal);
+//display login page
+router.get("/loginPage", userController.loginPage);
+//login(Shocking)
+router.post("/login", userController.login);
+//log out
+router.post("/logout", userController.logout);
+
