@@ -6,7 +6,7 @@ import * as menuController from "../controllers/menuController.js";
 import { Meal } from "../models/Meal.js";
 export const router = express.Router();
 import { Menu } from '../models/Menu.js'
-
+import { User } from '../models/User.js'
 
 
 //homepage
