@@ -1,57 +1,71 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Menu</title>
+    <title>Create New Meal</title>
     <link rel="stylesheet" href="../public/styles.css" />
   </head>
   <body>
-    <section id="addMenuItem">
-      <h1>Add Menu Item</h1>
+    <!-- put index.ejs add meal function here!-->
 
-      <form action="/admin/create" method="post">
+    <section id="fiala's_sandbox">
+      <h1>admin homepage visual</h1>
+      <div>
+        <p>Welcome, Admin!</p>
+      </div>
+      <!-- there should be a form that adds a meal to the menu, ideally it should be a table (like the character creation one). 
+       It should be a table that you can add and edit and delete from.  -->
+<form action="X" method="post">
         <ul>
           <li>
-            <label for="mealTitle">title</label>
-            <input id="mealTitle" type="text" name="mealTitle" />
+            <label for="title">meal:</label>
+            <select>
+              <option value="" disabled selected>Select a type</option>
+              <% meals.forEach(m => { %>
+                <option value="<%= m %>"><%= m %></option>
+              <% }) %>
+            </select>
           </li>
-          <!-- change to image upload instead of url -->
+          
           <li>
-            <label for="mealImg">image url</label>
-            <input id="mealImg" type="url" name="mealImg" />
+            <label for="date">date</label>
+            <input id="date" type="text" name="m-date" />
           </li>
-          <li>
-            <label for="mealDiet">dietary restrictions</label>
-            <ul>
-              <li>
-                <label for="mealDiet-V">vegan</label>
-                <input id="mealDiet-V" type="checkbox" name="mealDiet-V" />
-              </li>
-              <li>
-                <label for="mealDiet-VG">vegetarian</label>
-                <input id="mealDiet-VG" type="checkbox" name="mealDiet-VG" />
-              </li>
-              <li>
-                <label for="mealDiet-GF">gluten-free</label>
-                <input id="mealDiet-GF" type="checkbox" name="mealDiet-GF" />
-              </li>
-              <li>
-                <label for="mealDiet-DF">dairy-free</label>
-                <input id="mealDiet-DF" type="checkbox" name="mealDiet-DF" />
-              </li>
-              <li>
-                <label for="mealDiet-NF">nut-free</label>
-                <input id="mealDiet-NF" type="checkbox" name="mealDiet-NF" />
-              </li>
-            </ul>
-          </li>
+
           <li>
             <input type="submit" value="submit" />
           </li>
+          
         </ul>
 
-        <!-- title, image, diet-->
+        
       </form>
+      <!-- displays monthly menu as a table -->
+      <p>monthly menu table</p>
+     <table>
+      </thead>
+            <tbody>
+              <% meals.forEach(m => { %>
+                <tr>
+                  <td>
+                    <a class="link" href="/meals/<%= m._id %>"><%= m.title %></a>
+                  </td>
+                  <td><%= m.date %></td>
+                  <td class="right">
+                    <a class="link" href="/characters/<%= c._id %>/edit">Edit</a>
+                    <form action="/characters/<%= c._id %>/delete" method="post" class="inline">
+                      <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+    </table>
+
+      <!-- redirects to create new meal -->
+      <button>Create New Meal</button> 
+
+
+
     </section>
-    <section id="editMenuItem"></section>
   </body>
 </html>
