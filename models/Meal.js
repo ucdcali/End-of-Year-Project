@@ -5,7 +5,7 @@ const mealSchema = new mongoose.Schema({
   diet: { String,
   enum: ['V', 'VG', 'GF', 'DF', 'NF']
   },
-  img: String,
+  img: String
 });
 
 export const Meal = mongoose.model('Meal', mealSchema);
