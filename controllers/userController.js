@@ -1,7 +1,7 @@
 import { User } from '../models/User.js'
 // Login form
 export const loginPage = async (req, res) => {
-  res.render('auth/login', { error: null, form: {} });
+  res.render('/adminLogin', { error: null, form: {} });
 };
 
 // Login submit

@@ -7,8 +7,14 @@
   <body>
     <h1>Menu</h1>
     <!-- display title, image, diet -->
-    <h2>mealTitle</h2>
-    <img src="mealUrl" alt="a picture of yummy food" />
-    <p>mealDiet</p>
+    <h2><%=meals.Title%></h2>
+    <img src="<%=meals.Image%>" alt="a picture of yummy food" />
+
+
+  <% meals.diet.forEach(meal => { %>
+   <p><%=meals.Diet[meal]%></p>
+   console.log("<%=meals.Diet[meal]%>")
+      <% } %>
+)
   </body>
 </html>

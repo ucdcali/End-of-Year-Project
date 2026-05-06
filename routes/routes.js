@@ -23,4 +23,5 @@ router.get("/loginPage", userController.loginPage);
 router.post("/login", userController.login);
 //log out
 router.post("/logout", userController.logout);
+//login page
 
