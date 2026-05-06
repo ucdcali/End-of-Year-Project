@@ -1,9 +1,16 @@
 import mongoose from "mongoose";
 
+const menuMealSchema = new mongoose.Schema({
+  date: Date,
+  meal:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Meal'
+  }
+})
 const menuSchema = new mongoose.Schema({
-  Meals:[{
-    date: Date
-  }]
+  meals: [menuMealSchema],
+  month: String,
+  year: String
 });
 
 export const Menu = mongoose.model('Menu', menuSchema);
