@@ -50,10 +50,28 @@ export const createMeal = async (req, res, next) => {
     }
 }
 
+export const meal = async (req, res, next) => {
+  try {
+    const meal = await Meal.findById(req.params.id);
+
+    if (!meal) {
+      res.status(404).send('Meal not found');
+      return;
+    }
+
+    res.render('meals/:id', {
+      title: meal.title,
+      meal
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export const deleteMeal = async(req, res, next) => {
   try {
     const meal = await Meal.findByIdAndDelete(req.params.id);
-    res.redirect('/admin')
+    res.redirect('/meals')
   } catch (err) {
     next(err)
   }
@@ -62,7 +80,40 @@ export const deleteMeal = async(req, res, next) => {
 export const editMeal = async(req, res, next) => {
   try{
     const meal = await Meal.findById(req.params.id);
-    res.render("edit", { meal });
+    res.render("edit", { meal, title:"editing" });
+    }
+  catch (err) {
+    next(err)
+  }
+}
+
+export const saveEdits = async (req,res, next) => {
+  try {
+    const title = req.body.title
+    const diet = req.body.diet
+    const img = req.body.img
+    const updated = await Meal.findByIdAndUpdate (
+    req.params.id,
+    {title, diet, img},
+    {new: true, runValidators:true}
+
+);
+  if(!updated) return res.status(404).send('Meal not updated.');
+  res.redirect(`/meals/${updated._id}`)
+  }
+  catch (err){
+    next(err)
+  }
+}
+
+
+export const allMeals = async(req, res, next) => {
+  try{
+    const meals = await Meal.find();
+    res.render("meals", { 
+      meals,
+      title: "All Meals"
+     });
     }
   catch (err) {
     next(err)
