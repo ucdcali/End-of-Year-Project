@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Meals</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>All Meals</h1>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Diet</th>
+        </thead>
+        <tbody>
+              <% meals.forEach(m => { %>
+                <tr>
+                  <td>
+                    <a class="link" href="/meals/<%= m._id %>"></a>
+                  </td>
+                  <td><%= m.title %></td>
+                  <td><%= m.diet %></td>
+                  <td><%= m.img %></td>
+                  <td class="right">
+                    <a class="link" href="/meals/edit/<%= m._id %>">Edit</a>
+                    <form action="/meals/delete/<%= m._id %>" method="post" class="inline">
+                      <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+</body>
+</html>
