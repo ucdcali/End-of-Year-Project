@@ -30,3 +30,8 @@ router.post("/logout", userController.logout);
 router.get('/menu', menuController.getMenu);
 
 router.post('/admin/createMenu', menuController.createMenu)
+
+router.get('/studentInterface', async (req, res) => {
+    const meals = await Meal.find();
+    res.render('studentInterface')
+} )

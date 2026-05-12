@@ -1,13 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Menu</title>
-  <link rel="stylesheet" href="/styles.css">
+  <title>Daily Menu</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
+
 <body>
+  <h1>Todays Dish</h1>
 
-  <h1>You are at Index.ejs</h1>
+  <!-- display title, image, diet -->
+  <h2><%= meals[0].title %></h2>
+  <img src="<%= meals[0].img %>" alt="a picture of yummy food" />
+  <p><% if (meal[0].diet !== null) {
+          meal[0].diet
+        } else {
+          None
+        } %></p>
 
+  <div id="weekly">
+    <h1>Weekly Menu</h1>
 
+    <div class="container">
+      <% meals.forEach(meal => { %>
+
+        <p><%= meal.title %></p>
+        <img src="<%= meal.img %>" alt="a picture of yummy food" />
+        <p><% if (meal.diet !== null) {
+          meal.diet
+        } else {
+          None
+        } %></p>
+
+      <% }) %>
+    </div>
+  </div>
 </body>
 </html>
