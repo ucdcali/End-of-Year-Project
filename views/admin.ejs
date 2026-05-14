@@ -85,7 +85,8 @@
         <select>
             <% meals.forEach(m => { %>
                 <option name="meal" value="<%= m %>"><%= m.title %></option>
-                <%const betterMonth=getMonth(month);%>
+                <%const betterMonth=getMonth(month);%> 
+                <!-- This is breaking the entire thing, it would be great if it was fixed -->
                 <%const date= new Date(year,betterMonth,day);%>
                 <input name="mealdate" hidden value="<%= date %>"> 
               <% }) %>
