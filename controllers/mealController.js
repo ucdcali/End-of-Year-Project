@@ -6,41 +6,23 @@ const DIET = ['V', 'VG', 'GF', 'DF', 'NF'];
 
 export const homePage = async (req, res) => {
     try {
-      res.redirect("/admin")
-        // const meals = await Meal.find()
-        // if (date = meals.date) {
-        //     res.json(meals[1])
-        // }
-        // res.render('index', {
-        //   title: "Commons App",
-        //   meals
-        // })
-    }
-    catch (err) {
-        console.log(err)
-    }
-}
-
-export const adminPage = async (req, res, next) => {
-  try{
-    //const meals = await Meal.find()
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
  
-    const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999);
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
 
-     const menu = await Menu.findOne({
-      meals: {
-        $elemMatch:{
-          date: {
-            $gte: startOfDay,
-            $lte: endOfDay
-          }
-        }
+      const menu = await Menu.findOne({
+        meals: {
+          $elemMatch:{
+            date: {
+              $gte: startOfDay,
+              $lte: endOfDay
+            }
+         }
         
-      }
-    });
+       }
+      });
  
     if (!menu) {
       return res.send('No meal found for today.');
@@ -59,15 +41,20 @@ menu.meals.forEach(m => {
 
     const mealInfo = await Meal.findById(todaysMeal.meal);
 
-  //   res.render('admin', {
-  //   title: "Commons App",
-  //  meals,
-  //  startOfDay
-  //   })
-  // res.json(menu)
-  res.json(mealInfo)
-  // res.json(todaysMeal)
-  }
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
+
+export const adminPage = async (req, res, next) => {
+  try{
+    const meals = await Meal.find()
+    
+    res.render('admin', {
+     title: "Commons App",
+    meals
+       })}
     catch (err) {
         next(err)
     }
