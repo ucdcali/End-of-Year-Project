@@ -1,5 +1,6 @@
+import mongoose from 'mongoose';
 import { Meal } from '../models/Meal.js'
-//import { Menu } from '../models/Menu.js'
+import { Menu } from '../models/Menu.js'
 
 const DIET = ['V', 'VG', 'GF', 'DF', 'NF'];
 
@@ -16,22 +17,56 @@ export const homePage = async (req, res) => {
         // })
     }
     catch (err) {
-        next(err)
+        console.log(err)
     }
 }
 
 export const adminPage = async (req, res, next) => {
   try{
-  const meals = await Meal.find()
+    //const meals = await Meal.find()
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+ 
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
 
-    // if (date = meals.date) {
-    // res.json(meals[1])
-    // }
-    //// res.json(meals[1])
-    res.render('index', {
-    title: "Commons App",
-   meals
-    })
+     const menu = await Menu.findOne({
+      meals: {
+        $elemMatch:{
+          date: {
+            $gte: startOfDay,
+            $lte: endOfDay
+          }
+        }
+        
+      }
+    });
+ 
+    if (!menu) {
+      return res.send('No meal found for today.');
+    }
+    
+    console.log("startOfDay:", startOfDay);
+console.log("endOfDay:", endOfDay);
+
+menu.meals.forEach(m => {
+  console.log("meal date:", m.date);
+});
+
+    const todaysMeal = menu.meals.find(m =>
+      m.date >= startOfDay && m.date <= endOfDay
+    )
+
+    const mealInfo = await Meal.findById(todaysMeal.meal);
+
+  //   res.render('admin', {
+  //   title: "Commons App",
+  //  meals,
+  //  startOfDay
+  //   })
+  // res.json(menu)
+  res.json(mealInfo)
+  // res.json(todaysMeal)
   }
     catch (err) {
         next(err)
