@@ -41,6 +41,11 @@ menu.meals.forEach(m => {
 
     const mealInfo = await Meal.findById(todaysMeal.meal);
 
+    res.render('/index', {
+      mealInfo,
+      startOfDay,
+      menu
+    })
     }
     catch (err) {
         console.log(err)
