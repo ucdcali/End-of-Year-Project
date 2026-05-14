@@ -83,14 +83,14 @@
           <li>
         <p><%= day %>:</p>
         <select>
-            <% meals.forEach(m => { %>
-                <option name="meal" value="<%= m %>"><%= m.title %></option>
-                <%const betterMonth=getMonth(month);%> 
-                <!-- This is breaking the entire thing, it would be great if it was fixed -->
-                <%const date= new Date(year,betterMonth,day);%>
-                <input name="mealdate" hidden value="<%= date %>"> 
-              <% }) %>
-        </select>
+<% meals.forEach(m => { %>
+<option name="meal" value="<%= m %>"><%= m.title %></option>
+
+<%const date= new Date(Date.parse(`{$month} {$day}, {$year}`));%>
+<%console.log(date);%>
+<input name="date" hidden value="<%= date %>">
+<% }) %>
+</select>
         </li>
      <% }) %>
       </ul>

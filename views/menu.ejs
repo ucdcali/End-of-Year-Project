@@ -35,10 +35,14 @@
           <li>
         <p><%= day %>:</p>
         <select>
-            <% meals.forEach(m => { %>
-                <option name="meal" value="<%= m %>"><%= m.title %></option>
-              <% }) %>
-        </select>
+<% meals.forEach(m => { %>
+<option name="meal" value="<%= m %>"><%= m.title %></option>
+<%const betterMonth = getMonth(month) %>
+<%const date= new Date(Date.parse(`{$month} {$day}, {$year}`));%>
+<%console.log(date);%>
+<input name="date" hidden value="<%= date %>">
+<% }) %>
+</select>
         </li>
      <% }) %>
       </ul>
