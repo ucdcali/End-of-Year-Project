@@ -20,8 +20,13 @@ router.post("/meals/:id", mealController.saveEdits)
 //delete a meal
 router.post("/meals/delete/:id", mealController.deleteMeal);
 
-router.get('meals/:id', mealController.meal)
+router.get('meals/:id', mealController.meal);
 
 router.get('/menu', menuController.getMenu);
 
-router.post('/admin/createMenu', menuController.createMenu)
+router.post('/admin/createMenu', menuController.createMenu);
+
+router.get('/view/:id', (req, res) => {
+  const viewId = req.params.id; // Get ID from URL
+  res.render('views', { id: viewId }); // Pass to EJS
+});
