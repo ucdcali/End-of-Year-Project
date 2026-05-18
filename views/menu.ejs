@@ -1,52 +1,64 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Menu</title>
+    <title>Monthly Menu</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
-     <body>
-     
-    <h1>MENU EJS - create or edit menus here</h1>
-    <form action="/menu" method="post">
-      <label for="month">Month:</label>
-      <select name="month" id="month" required>
-        <option disabled selected>Select Month</option>
-        <option value="january">January</option>
-        <option value="february">February</option>
-        <option value="march">March</option>
-        <option value="april">April</option>
-        <option value="may">May</option>
-        <option value="june">June</option>
-        <option value="july">July</option>
-        <option value="august">August</option>
-        <option value="september">September</option>
-        <option value="october">October</option>
-        <option value="november">November</option>
-        <option value="december">December</option>
-      </select>
-<!-- set all for 31 days in array-->
- <% array= ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]; %>
-
-      <label for="year">Year:</label>
-      <input name="year" id="year" type="text" maxlength="4"/>
-
-     <ul>
-        <% array.forEach(day => { %> 
-          <li>
-        <p><%= day %>:</p>
-        <select>
-<% meals.forEach(m => { %>
-<option name="meal" value="<%= m %>"><%= m.title %></option>
-<%const betterMonth = getMonth(month) %>
-<%const date= new Date(Date.parse(`{$month} {$day}, {$year}`));%>
-<%console.log(date);%>
-<input name="date" hidden value="<%= date %>">
-<% }) %>
-</select>
-        </li>
-     <% }) %>
-      </ul>
-      <input type="submit" value="submit" />
-    </form>
+  <body>
+    <%- include('navbar') %>
+    
+    <main class="container">
+      <h1>Monthly Menu - <%= month.charAt(0).toUpperCase() + month.slice(1) %> <%= year %></h1>
+      
+      <% if (noMenu) { %>
+        <div class="no-menu-message">
+          <p>No menu available for <%= month.charAt(0).toUpperCase() + month.slice(1) %> <%= year %>.</p>
+          <p>Please check back later or select a different month.</p>
+        </div>
+      <% } else { %>
+        <div class="monthly-menu">
+          <% 
+            // Group meals by date
+            const mealsByDate = {};
+            meals.forEach(m => {
+              const dateObj = new Date(m.date);
+              const dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+              if (!mealsByDate[dateStr]) {
+                mealsByDate[dateStr] = [];
+              }
+              mealsByDate[dateStr].push(m);
+            });
+          %>
+          
+          <% Object.keys(mealsByDate).sort((a, b) => new Date(a) - new Date(b)).forEach(dateStr => { %>
+            <div class="menu-day">
+              <h3><%= dateStr %></h3>
+              <div class="meals-for-day">
+                <% mealsByDate[dateStr].forEach(m => { %>
+                  <% if (m.meal) { %>
+                    <div class="meal-card">
+                      <a href="/meals/<%= m.meal._id %>">
+                        <img src="<%= m.meal.img %>" alt="<%= m.meal.title %>" class="meal-thumbnail" />
+                        <h4><%= m.meal.title %></h4>
+                        <% if (m.meal.diet && m.meal.diet.length > 0) { %>
+                          <p class="dietary-tags">
+                            <% m.meal.diet.forEach(d => { %>
+                              <span class="tag"><%= d %></span>
+                            <% }); %>
+                          </p>
+                        <% } %>
+                        <p class="view-details">Click to view details →</p>
+                      </a>
+                    </div>
+                  <% } %>
+                <% }); %>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    </main>
+  </body>
+</html>
   </body>
 </html>

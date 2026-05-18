@@ -6,68 +6,46 @@
 </head>
 
 <body>
-  <h1>Todays Dish</h1>
+  <%- include('navbar') %>
+  
+  <main class="container">
+    <h1>Today's Dish</h1>
 
-  <!-- display title, image, diet -->
-  <h2><%= meals[0].title %></h2>
-  <h2 href="/view/<%= meals[0].id %>"></h2>
-  <img src="<%= meals[0].img %>" alt="a picture of yummy food" />
-  <p><% if (meal[0].diet !== null) {
-          meal[0].diet
-        } else {
-          None
-        } %></p>
-
-      <form action="/admin/createMeal" method="post">
-        <ul>
-          <li>
-            <label for="title">title</label>
-            <input id="title" type="text" name="title" />
-          </li>
-          <!-- change to image upload instead of url -->
-          <li>
-            <label for="img">image url</label>
-            <input id="img" type="url" name="img" />
-          </li>
-          <li>
-            
-            <label for="diet">dietary restrictions</label>
+    <% if (noMealToday) { %>
+      <div class="no-meal-message">
+        <p>No meal scheduled for today.</p>
+      </div>
+    <% } else if (mealInfo) { %>
+      <section class="meal-display">
+        <h2><%= mealInfo.title %></h2>
+        <img src="<%= mealInfo.img %>" alt="<%= mealInfo.title %>" class="meal-image" />
+        
+        <% if (mealInfo.description) { %>
+          <p class="meal-description"><%= mealInfo.description %></p>
+        <% } %>
+        
+        <% if (mealInfo.diet && mealInfo.diet.length > 0) { %>
+          <div class="dietary-info">
+            <p><strong>Dietary Info:</strong></p>
             <ul>
-              <li>
-                <label for="diet-V">vegan</label>
-                <input id="diet-V" type="checkbox" name="diet" value="V" />
-              </li>
-              <li>
-                <label for="diet-VG">vegetarian</label>
-                <input id="diet-VG" type="checkbox" name="diet" value="VG"/>
-              </li>
-              <li>
-                <label for="diet-GF">gluten-free</label>
-                <input id="diet-GF" type="checkbox" name="diet" value="GF" />
-              </li>
-              <li>
-                <label for="diet-DF">dairy-free</label>
-                <input id="diet-DF" type="checkbox" name="diet" value="DF"/>
-              </li>
-              <li>
-                <label for="diet-NF">nut-free</label>
-                <input id="diet-NF" type="checkbox" name="diet" value="NF"/>
-              </li>
+              <% mealInfo.diet.forEach(d => { %>
+                <li>
+                  <% if (d === 'V') { %>V (Vegan)
+                  <% } else if (d === 'VG') { %>VG (Vegetarian)
+                  <% } else if (d === 'GF') { %>GF (Gluten-Free)
+                  <% } else if (d === 'DF') { %>DF (Dairy-Free)
+                  <% } else if (d === 'NF') { %>NF (Nut-Free)
+                  <% } %>
+                </li>
+              <% }); %>
             </ul>
+          </div>
+        <% } %>
+        
+        <a href="/menu" class="btn btn-primary">View Full Monthly Menu</a>
+      </section>
+    <% } %>
+  </main>
 
-    <div class="container">
-      <% meals.forEach(meal => { %>
-
-        <p><%= meal.title %></p>
-        <img src="<%= meal.img %>" alt="a picture of yummy food" />
-        <p><% if (meal.diet !== null) {
-          meal.diet
-        } else {
-          None
-        } %></p>
-
-      <% }) %>
-    </div>
-  </div>
 </body>
 </html>

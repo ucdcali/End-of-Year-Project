@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Menu</title>
+    <title><%= title %> - Meal Details</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <h1>Menu</h1>
-    <!-- display title, image, diet -->
-    <h2><%=meals.Title%></h2>
-    <img src="<%=meals.Image%>" alt="a picture of yummy food" />
-
-
-  <% meals.diet.forEach(meal => { %>
-   <p><%=meals.Diet[meal]%></p>
-   console.log("<%=meals.Diet[meal]%>")
-      <% } %>
-)
+    <%- include('navbar') %>
+    
+    <main class="container">
+      <div class="meal-detail">
+        <h1><%= meal.title %></h1>
+        
+        <img src="<%= meal.img %>" alt="<%= meal.title %>" class="meal-detail-image" />
+        
+        <% if (meal.description) { %>
+          <div class="meal-detail-description">
+            <h2>Description</h2>
+            <p><%= meal.description %></p>
+          </div>
+        <% } %>
+        
+        <% if (meal.diet && meal.diet.length > 0) { %>
+          <div class="dietary-info">
+            <h2>Dietary Information</h2>
+            <ul>
+              <% meal.diet.forEach(d => { %>
+                <li>
+                  <% if (d === 'V') { %>🌱 Vegan
+                  <% } else if (d === 'VG') { %>🥬 Vegetarian
+                  <% } else if (d === 'GF') { %>🌾 Gluten-Free
+                  <% } else if (d === 'DF') { %>🥛 Dairy-Free
+                  <% } else if (d === 'NF') { %>🥜 Nut-Free
+                  <% } %>
+                </li>
+              <% }); %>
+            </ul>
+          </div>
+        <% } %>
+        
+        <div class="meal-actions">
+          <a href="/menu" class="btn btn-secondary">Back to Menu</a>
+          <a href="/" class="btn btn-secondary">Back to Home</a>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
