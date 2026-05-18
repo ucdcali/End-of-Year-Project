@@ -3,48 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= title %></title>
+  <title><%= title %> - Edit Meal</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <main class="wrap">
-    <a class="link" href="/meals/<%= meal._id %>"></a>
+  <%- include('navbar') %>
+  
+  <main class="container edit-container">
+    <section class="edit-card">
+      <h1>Edit Meal</h1>
 
-    <section class="card">
-      <h2>Edit Meal</h2>
+      <form action='/meals/edit/<%= meal._id %>' method='post' class="edit-form">
+        <div class="form-group">
+          <label for="title">Meal Title</label>
+          <input id="title" name="title" maxlength="40" value="<%= meal.title %>" required />
+        </div>
 
-      <form action='/meals/<%=meal._id%>' method='post' class="form">
-        <label>Name</label>
-        <input name="title" maxlength="40" value="<%= meal.title %>" required />
-      
-        <label>Diet</label>
-          <ul>
-              <li>
-                <label for="diet-V">vegan</label>
-                <input id="diet-V" type="checkbox" name="diet" value="V" />
-              </li>
-              <li>
-                <label for="diet-VG">vegetarian</label>
-                <input id="diet-VG" type="checkbox" name="diet" value="VG" />
-              </li>
-              <li>
-                <label for="diet-GF">gluten-free</label>
-                <input id="diet-GF" type="checkbox" name="diet" value="GF" />
-              </li>
-              <li>
-                <label for="diet-DF">dairy-free</label>
-                <input id="diet-DF" type="checkbox" name="diet" value="DF" />
-              </li>
-              <li>
-                <label for="diet-NF">nut-free</label>
-                <input id="diet-NF" type="checkbox" name="diet" value="NF" />
-              </li>
-            </ul>
-        </select>
-        <label>Image</label>
-        <input name="img" maxlength="40" value="<%= meal.img %>" required />
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="4"><%= meal.description || '' %></textarea>
+        </div>
 
-        <button class="btn" type="submit">Save</button>
+        <div class="form-group">
+          <label for="img">Image URL</label>
+          <input id="img" name="img" type="url" value="<%= meal.img %>" />
+        </div>
+
+        <div class="form-group">
+          <label>Dietary Restrictions</label>
+          <ul class="checkbox-list">
+            <li>
+              <input id="diet-V" type="checkbox" name="diet" value="V" 
+                <% if (meal.diet && meal.diet.includes('V')) { %>checked<% } %> />
+              <label for="diet-V">Vegan</label>
+            </li>
+            <li>
+              <input id="diet-VG" type="checkbox" name="diet" value="VG"
+                <% if (meal.diet && meal.diet.includes('VG')) { %>checked<% } %> />
+              <label for="diet-VG">Vegetarian</label>
+            </li>
+            <li>
+              <input id="diet-GF" type="checkbox" name="diet" value="GF"
+                <% if (meal.diet && meal.diet.includes('GF')) { %>checked<% } %> />
+              <label for="diet-GF">Gluten-Free</label>
+            </li>
+            <li>
+              <input id="diet-DF" type="checkbox" name="diet" value="DF"
+                <% if (meal.diet && meal.diet.includes('DF')) { %>checked<% } %> />
+              <label for="diet-DF">Dairy-Free</label>
+            </li>
+            <li>
+              <input id="diet-NF" type="checkbox" name="diet" value="NF"
+                <% if (meal.diet && meal.diet.includes('NF')) { %>checked<% } %> />
+              <label for="diet-NF">Nut-Free</label>
+            </li>
+          </ul>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Save Changes</button>
+          <a href="/meals/<%= meal._id %>" class="btn btn-secondary">Cancel</a>
+        </div>
       </form>
     </section>
   </main>

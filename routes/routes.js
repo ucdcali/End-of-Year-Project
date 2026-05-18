@@ -3,30 +3,31 @@ import * as mealController from "../controllers/mealController.js";
 import * as menuController from "../controllers/menuController.js";
 
 import { Meal } from "../models/Meal.js";
-export const router = express.Router();
 import { Menu } from '../models/Menu.js'
 
+export const router = express.Router();
 
-//homepage
+// STUDENT PAGES
+//homepage - displays today's meal
 router.get("/", mealController.homePage);
+// student menu - displays full monthly menu
+router.get('/menu', menuController.displayMonthlyMenu);
+// meal detail - displays single meal details
+router.get('/meals/:id', mealController.displayMealDetail);
+
+// ADMIN PAGES
 //adminpage
 router.get("/admin", mealController.adminPage);
 //create a meal
 router.post("/admin/createMeal", mealController.createMeal);
 //edit a meal
 router.get("/meals/edit/:id", mealController.editMeal);
-router.post("/meals/:id", mealController.saveEdits)
+router.post("/meals/edit/:id", mealController.saveEdits)
 
 //delete a meal
 router.post("/meals/delete/:id", mealController.deleteMeal);
 
-router.get('meals/:id', mealController.meal);
-
-router.get('/menu', menuController.getMenu);
-
+// MENU MANAGEMENT
 router.post('/admin/createMenu', menuController.createMenu);
-
-router.get('/view/:id', (req, res) => {
-  const viewId = req.params.id; // Get ID from URL
-  res.render('views', { id: viewId }); // Pass to EJS
-});
+router.get('/admin/editMenu/:id', menuController.editMenuPage);
+router.post('/admin/editMenu/:id', menuController.updateMenu);

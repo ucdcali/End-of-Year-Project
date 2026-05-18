@@ -6,34 +6,46 @@
 </head>
 
 <body>
-  <h1>Todays Dish</h1>
+  <%- include('navbar') %>
+  
+  <main class="container">
+    <h1>Today's Dish</h1>
 
-  <!-- display title, image, diet -->
-  <h2><%= meals[0].title %></h2>
-  <h2 href="/view/<%= meals[0].id %>"></h2>
-  <img src="<%= meals[0].img %>" alt="a picture of yummy food" />
-  <p><% if (meal[0].diet !== null) {
-          meal[0].diet
-        } else {
-          None
-        } %></p>
+    <% if (noMealToday) { %>
+      <div class="no-meal-message">
+        <p>No meal scheduled for today.</p>
+      </div>
+    <% } else if (mealInfo) { %>
+      <section class="meal-display">
+        <h2><%= mealInfo.title %></h2>
+        <img src="<%= mealInfo.img %>" alt="<%= mealInfo.title %>" class="meal-image" />
+        
+        <% if (mealInfo.description) { %>
+          <p class="meal-description"><%= mealInfo.description %></p>
+        <% } %>
+        
+        <% if (mealInfo.diet && mealInfo.diet.length > 0) { %>
+          <div class="dietary-info">
+            <p><strong>Dietary Info:</strong></p>
+            <ul>
+              <% mealInfo.diet.forEach(d => { %>
+                <li>
+                  <% if (d === 'V') { %>V (Vegan)
+                  <% } else if (d === 'VG') { %>VG (Vegetarian)
+                  <% } else if (d === 'GF') { %>GF (Gluten-Free)
+                  <% } else if (d === 'DF') { %>DF (Dairy-Free)
+                  <% } else if (d === 'NF') { %>NF (Nut-Free)
+                  <% } %>
+                </li>
+              <% }); %>
+            </ul>
+          </div>
+        <% } %>
+        
+        <a href="/menu" class="btn btn-primary">View Full Monthly Menu</a>
+      </section>
+    <% } %>
+  </main>
 
-  <div id="weekly">
-    <h1>Weekly Menu</h1>
-
-    <div class="container">
-      <% meals.forEach(meal => { %>
-
-        <p><%= meal.title %></p>
-        <img src="<%= meal.img %>" alt="a picture of yummy food" />
-        <p><% if (meal.diet !== null) {
-          meal.diet
-        } else {
-          None
-        } %></p>
-
-      <% }) %>
-    </div>
-  </div>
 </body>
 </html>
