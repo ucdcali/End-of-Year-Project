@@ -14,10 +14,19 @@ router.get("/admin", mealController.adminPage);
 //create a meal
 router.post("/admin/createMeal", mealController.createMeal);
 //edit a meal
-router.post("/admin/edit/:id", mealController.editMeal);
-//delet a meal
-router.post("/admin/delete/:id", mealController.deleteMeal);
+router.get("/meals/edit/:id", mealController.editMeal);
+router.post("/meals/:id", mealController.saveEdits)
+
+//delete a meal
+router.post("/meals/delete/:id", mealController.deleteMeal);
+
+router.get('meals/:id', mealController.meal);
 
 router.get('/menu', menuController.getMenu);
 
-router.post('/admin/createMenu', menuController.createMenu)
+router.post('/admin/createMenu', menuController.createMenu);
+
+router.get('/view/:id', (req, res) => {
+  const viewId = req.params.id; // Get ID from URL
+  res.render('views', { id: viewId }); // Pass to EJS
+});

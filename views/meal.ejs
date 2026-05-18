@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Daily Menu</title>
-  <link rel="stylesheet" href="/styles.css" />
-</head>
+  <head>
+    <title>Menu</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <p>Welcome, Admin!</p>
 
-<body>
-  <h1>Todays Dish</h1>
+    <h1>Home</h1>
+    <section id="addMenuItem">
+      <h1>Create New Meal Item</h1>
 
-  <!-- display title, image, diet -->
-  <h2><%= meals[0].title %></h2>
-  <h2 href="/view/<%= meals[0].id %>"></h2>
-  <img src="<%= meals[0].img %>" alt="a picture of yummy food" />
-  <p><% if (meal[0].diet !== null) {
-          meal[0].diet
-        } else {
-          None
-        } %></p>
-
-      <form action="/admin/createMeal" method="post">
+      <form action="/admin/create" method="post">
         <ul>
           <li>
             <label for="title">title</label>
@@ -30,7 +23,6 @@
             <input id="img" type="url" name="img" />
           </li>
           <li>
-            
             <label for="diet">dietary restrictions</label>
             <ul>
               <li>
@@ -39,7 +31,7 @@
               </li>
               <li>
                 <label for="diet-VG">vegetarian</label>
-                <input id="diet-VG" type="checkbox" name="diet" value="VG"/>
+                <input id="diet-VG" type="checkbox" name="diet" value="VG" />
               </li>
               <li>
                 <label for="diet-GF">gluten-free</label>
@@ -47,27 +39,19 @@
               </li>
               <li>
                 <label for="diet-DF">dairy-free</label>
-                <input id="diet-DF" type="checkbox" name="diet" value="DF"/>
+                <input id="diet-DF" type="checkbox" name="diet" value="DF" />
               </li>
               <li>
                 <label for="diet-NF">nut-free</label>
-                <input id="diet-NF" type="checkbox" name="diet" value="NF"/>
+                <input id="diet-NF" type="checkbox" name="diet" value="NF" />
               </li>
             </ul>
-
-    <div class="container">
-      <% meals.forEach(meal => { %>
-
-        <p><%= meal.title %></p>
-        <img src="<%= meal.img %>" alt="a picture of yummy food" />
-        <p><% if (meal.diet !== null) {
-          meal.diet
-        } else {
-          None
-        } %></p>
-
-      <% }) %>
-    </div>
-  </div>
-</body>
+          </li>
+          <li>
+            <input type="submit" value="submit" />
+          </li>
+        </ul>
+      </form>
+    </section>
+  </body>
 </html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Menu</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <p>Welcome, Admin!</p>
+
+    <h1>Home</h1>
+    <section id="addMenuItem">
+      <h1>Create New Meal Item</h1>
+
+      <form action="/admin/createMeal" method="post">
+        <ul>
+          <li>
+            <label for="title">title</label>
+            <input id="title" type="text" name="title" />
+          </li>
+          <!-- change to image upload instead of url -->
+          <li>
+            <label for="img">image url</label>
+            <input id="img" type="url" name="img" />
+          </li>
+          <li>
+            <label for="diet">dietary restrictions</label>
+            <ul>
+              <li>
+                <label for="diet-V">vegan</label>
+                <input id="diet-V" type="checkbox" name="diet" value="V" />
+              </li>
+              <li>
+                <label for="diet-VG">vegetarian</label>
+                <input id="diet-VG" type="checkbox" name="diet" value="VG" />
+              </li>
+              <li>
+                <label for="diet-GF">gluten-free</label>
+                <input id="diet-GF" type="checkbox" name="diet" value="GF" />
+              </li>
+              <li>
+                <label for="diet-DF">dairy-free</label>
+                <input id="diet-DF" type="checkbox" name="diet" value="DF" />
+              </li>
+              <li>
+                <label for="diet-NF">nut-free</label>
+                <input id="diet-NF" type="checkbox" name="diet" value="NF" />
+              </li>
+            </ul>
+          </li>
+          <li>
+            <input type="submit" value="submit" />
+          </li>
+        </ul>
+      </form>
+    </section>
+     
+    <h1>MENU EJS - create or edit menus here</h1>
+    <form action="/admin/createMenu" method="post">
+      <label for="month">Month:</label>
+      <select name="month" id="month" required>
+        <option disabled selected>Select Month</option>
+        <option value="january">January</option>
+        <option value="february">February</option>
+        <option value="march">March</option>
+        <option value="april">April</option>
+        <option value="may">May</option>
+        <option value="june">June</option>
+        <option value="july">July</option>
+        <option value="august">August</option>
+        <option value="september">September</option>
+        <option value="october">October</option>
+        <option value="november">November</option>
+        <option value="december">December</option>
+      </select>
+<!-- set all for 31 days in array-->
+ <% array= ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]; %>
+
+      <label for="year">Year:</label>
+      <input name="year" id="year" type="text" maxlength="4"/>
+
+     <ul>
+        <% array.forEach(day => { %> 
+          <li>
+        <p><%= day %>:</p>
+        <select>
+<% meals.forEach(m => { %>
+<option name="meal" value="<%= m %>"><%= m.title %></option>
+
+<%const date= new Date(Date.parse(`{$month} {$day}, {$year}`));%>
+<%console.log(date);%>
+<input name="date" hidden value="<%= date %>">
+<% }) %>
+</select>
+        </li>
+     <% }) %>
+      </ul>
+      <input type="submit" value="submit" />
+    </form>
+  </body>
+</html>
