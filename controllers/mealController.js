@@ -1,5 +1,5 @@
 import { Meal } from '../models/Meal.js'
-//import { Menu } from '../models/Menu.js'
+// import { Menu } from '../models/Menu.js'
 
 const DIET = ['V', 'VG', 'GF', 'DF', 'NF'];
 
@@ -42,7 +42,8 @@ export const adminPage = async (req, res, next) => {
 export const createMeal = async (req, res, next) => {
     try {
       const { title, diet, img } = req.body;
-      await Meal.create({ title, diet, img });     
+      const meal = await Meal.create({ title, diet, img }); 
+      console.log(meal)    
       res.redirect("/admin")
     }
     catch (err) {

@@ -2,7 +2,7 @@ import { Menu } from '../models/Menu.js'
 
 export const getMenu = async (req, res ) => {
     try {
-        const menu = await Menu.find({month: 'May'})
+        const menu = await Menu.find({month: 'May'}).populate('meals.meal')
         res.json(menu)
     } catch (error) {
        console.log(error) 

@@ -1,13 +1,11 @@
 import express from "express";
 import * as mealController from "../controllers/mealController.js";
-import * as userController from "../controllers/userController.js";
 import * as menuController from "../controllers/menuController.js";
 
 import { Meal } from "../models/Meal.js";
-export const router = express.Router();
 import { Menu } from '../models/Menu.js'
-import { User } from '../models/User.js'
 
+export const router = express.Router();
 
 //homepage
 router.get("/", mealController.homePage);
@@ -19,13 +17,6 @@ router.post("/admin/createMeal", mealController.createMeal);
 router.post("/admin/edit/:id", mealController.editMeal);
 //delet a meal
 router.post("/admin/delete/:id", mealController.deleteMeal);
-//display login page
-router.get("/loginPage", userController.loginPage);
-//login(Shocking)
-router.post("/login", userController.login);
-//log out
-router.post("/logout", userController.logout);
-//login page
 
 router.get('/menu', menuController.getMenu);
 
