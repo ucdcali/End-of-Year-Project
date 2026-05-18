@@ -24,6 +24,27 @@ router.post("/admin/createMeal", mealController.createMeal);
 router.get("/meals/edit/:id", mealController.editMeal);
 router.post("/meals/edit/:id", mealController.saveEdits)
 
+router.get('/login', (req, res) => {
+  res.render('login');
+//   res.send('this is working')
+});
+
+// Login submit
+router.post('/login', async (req, res) => {
+  try {
+    const password = req.body.password || '';
+    if (password === process.env.PASSWORD) {
+            res.redirect('/admin');
+    }
+    else {
+        res.redirect('/')
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 //delete a meal
 router.post("/meals/delete/:id", mealController.deleteMeal);
 
