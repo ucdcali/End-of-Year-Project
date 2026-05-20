@@ -1,9 +1,11 @@
 import express from "express";
 import * as mealController from "../controllers/mealController.js";
 import * as menuController from "../controllers/menuController.js";
+import * as suggestionController from "../controllers/suggestionController.js";
 
 import { Meal } from "../models/Meal.js";
-import { Menu } from '../models/Menu.js'
+import { Menu } from '../models/Menu.js';
+import { Suggestion } from "../models/Suggestion.js";
 
 export const router = express.Router();
 
@@ -14,6 +16,8 @@ router.get("/", mealController.homePage);
 router.get('/menu', menuController.displayMonthlyMenu);
 // meal detail - displays single meal details
 router.get('/meals/:id', mealController.displayMealDetail);
+// create suggestion
+router.post('/suggestion', suggestionController.submitSuggestion);
 
 // ADMIN PAGES
 //adminpage
@@ -23,6 +27,8 @@ router.post("/admin/createMeal", mealController.createMeal);
 //edit a meal
 router.get("/meals/edit/:id", mealController.editMeal);
 router.post("/meals/edit/:id", mealController.saveEdits)
+//view suggestions
+router.get('/suggestions', suggestionController.viewSuggestions)
 
 router.get('/login', (req, res) => {
   res.render('login');
