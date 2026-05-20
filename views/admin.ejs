@@ -170,7 +170,13 @@
               <% for (let day = 1; day <= 31; day++) { %>
                 <div class="menu-day-select">
                   <label for="meal_day_<%= day %>">Day <%= day %></label>
-                  <select name="meal_day_<%= day %>" id="meal_day_<%= day %>">
+                  <select name="meal1_day_<%= day %>" id="meal1_day_<%= day %>">
+                    <option value="">No meal</option>
+                    <% meals.forEach(meal => { %>
+                      <option value="<%= meal._id %>"><%= meal.title %></option>
+                    <% }); %>
+                  </select>
+                  <select name="meal2_day_<%= day %>" id="meal2_day_<%= day %>">
                     <option value="">No meal</option>
                     <% meals.forEach(meal => { %>
                       <option value="<%= meal._id %>"><%= meal.title %></option>
