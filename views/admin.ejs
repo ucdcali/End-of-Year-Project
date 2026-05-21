@@ -165,17 +165,31 @@
           </div>
 
           <div id="menu-days">
-            <p>Select a meal for each day of the month. Leave a day blank if there is no meal scheduled.</p>
+            <p>Select up to two meals for each day. Leave a meal slot blank if no meal is scheduled.</p>
             <div class="menu-day-grid">
               <% for (let day = 1; day <= 31; day++) { %>
-                <div class="menu-day-select">
-                  <label for="meal_day_<%= day %>">Day <%= day %></label>
-                  <select name="meal_day_<%= day %>" id="meal_day_<%= day %>">
-                    <option value="">No meal</option>
-                    <% meals.forEach(meal => { %>
-                      <option value="<%= meal._id %>"><%= meal.title %></option>
-                    <% }); %>
-                  </select>
+                <div class="menu-day-card">
+                  <div class="menu-day-card-header">Day <%= day %></div>
+                  <div class="menu-day-selects">
+                    <div class="menu-day-select">
+                      <label for="meal_day_<%= day %>_1">Meal 1</label>
+                      <select name="meal_day_<%= day %>_1" id="meal_day_<%= day %>_1">
+                        <option value="">No meal</option>
+                        <% meals.forEach(meal => { %>
+                          <option value="<%= meal._id %>"><%= meal.title %></option>
+                        <% }); %>
+                      </select>
+                    </div>
+                    <div class="menu-day-select">
+                      <label for="meal_day_<%= day %>_2">Meal 2</label>
+                      <select name="meal_day_<%= day %>_2" id="meal_day_<%= day %>_2">
+                        <option value="">No meal</option>
+                        <% meals.forEach(meal => { %>
+                          <option value="<%= meal._id %>"><%= meal.title %></option>
+                        <% }); %>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               <% } %>
             </div>

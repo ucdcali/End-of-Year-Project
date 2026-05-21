@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const menuMealSchema = new mongoose.Schema({
   date: Date,
+  meals: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Meal'
+  }],
   meal:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Meal'

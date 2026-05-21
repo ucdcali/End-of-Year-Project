@@ -28,15 +28,24 @@
         </div>
 
         <div id="menu-days">
-          <p>Select a meal for each day of the month. Leave a day blank if no meal is scheduled.</p>
+          <p>Select up to two meals for each day. Leave a meal slot blank if no meal is scheduled.</p>
           <div class="menu-day-grid">
             <% menuDays.forEach(item => { %>
               <div class="menu-day-select">
-                <label for="meal_day_<%= item.day %>">Day <%= item.day %></label>
-                <select name="meal_day_<%= item.day %>" id="meal_day_<%= item.day %>">
+                <label for="meal_day_<%= item.day %>_1">Day <%= item.day %> - Meal 1</label>
+                <select name="meal_day_<%= item.day %>_1" id="meal_day_<%= item.day %>_1">
                   <option value="">No meal</option>
                   <% allMeals.forEach(meal => { %>
-                    <option value="<%= meal._id %>" <%= item.mealId === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
+                    <option value="<%= meal._id %>" <%= item.meal1Id === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="menu-day-select">
+                <label for="meal_day_<%= item.day %>_2">Day <%= item.day %> - Meal 2</label>
+                <select name="meal_day_<%= item.day %>_2" id="meal_day_<%= item.day %>_2">
+                  <option value="">No meal</option>
+                  <% allMeals.forEach(meal => { %>
+                    <option value="<%= meal._id %>" <%= item.meal2Id === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
                   <% }); %>
                 </select>
               </div>

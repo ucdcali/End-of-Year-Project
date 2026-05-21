@@ -11,7 +11,9 @@ export const displayMonthlyMenu = async (req, res) => {
         const menu = await Menu.findOne({
             month: month,
             year: year
-        }).populate('meals.meal');
+        })
+        .populate('meals.meals')
+        .populate('meals.meal');
         
         if (!menu) {
             return res.render('menu', {
@@ -62,15 +64,20 @@ function buildMenuDays(month, year, body) {
     const meals = [];
 
     for (let day = 1; day <= 31; day++) {
-        const mealId = body[`meal_day_${day}`];
-        if (!mealId) continue;
+        const mealId1 = body[`meal_day_${day}_1`];
+        const mealId2 = body[`meal_day_${day}_2`];
+        const dayMeals = [];
+
+        if (mealId1) dayMeals.push(mealId1);
+        if (mealId2) dayMeals.push(mealId2);
+        if (dayMeals.length === 0) continue;
 
         const date = new Date(year, monthIndex, day);
         if (date.getMonth() !== monthIndex) continue;
 
         meals.push({
             date,
-            meal: mealId
+            meals: dayMeals
         });
     }
 
@@ -104,7 +111,9 @@ export const createMenu = async (req, res) => {
 
 export const editMenuPage = async (req, res, next) => {
     try {
-        const menu = await Menu.findById(req.params.id).populate('meals.meal');
+        const menu = await Menu.findById(req.params.id)
+            .populate('meals.meals')
+            .populate('meals.meal');
         if (!menu) {
             return res.status(404).send('Menu not found');
         }
@@ -113,9 +122,20 @@ export const editMenuPage = async (req, res, next) => {
         const menuDays = Array.from({ length: 31 }, (_, index) => {
             const day = index + 1;
             const entry = menu.meals.find(item => new Date(item.date).getDate() === day);
+            const mealIds = [];
+
+            if (entry) {
+                if (Array.isArray(entry.meals) && entry.meals.length > 0) {
+                    mealIds.push(...entry.meals.map(m => String(m._id ?? m)));
+                } else if (entry.meal) {
+                    mealIds.push(String(entry.meal._id ?? entry.meal));
+                }
+            }
+
             return {
                 day,
-                mealId: entry ? String(entry.meal._id) : ''
+                meal1Id: mealIds[0] || '',
+                meal2Id: mealIds[1] || ''
             };
         });
 

@@ -8,7 +8,18 @@
     <%- include('navbar') %>
     
     <main class="container">
-      <h1>Monthly Menu - <%= month.charAt(0).toUpperCase() + month.slice(1) %> <%= year %></h1>
+      <% const monthNames = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+         const currentMonthIndex = monthNames.indexOf(month.toLowerCase());
+         const prevMonthIndex = (currentMonthIndex + 11) % 12;
+         const nextMonthIndex = (currentMonthIndex + 1) % 12;
+         const prevYear = prevMonthIndex === 11 ? Number(year) - 1 : Number(year);
+         const nextYear = nextMonthIndex === 0 ? Number(year) + 1 : Number(year);
+      %>
+      <div class="menu-navigation">
+        <a class="menu-nav-link" href="/menu?month=<%= monthNames[prevMonthIndex] %>&year=<%= prevYear %>">&larr; Previous month</a>
+        <h1>Monthly Menu - <%= month.charAt(0).toUpperCase() + month.slice(1) %> <%= year %></h1>
+        <a class="menu-nav-link" href="/menu?month=<%= monthNames[nextMonthIndex] %>&year=<%= nextYear %>">Next month &rarr;</a>
+      </div>
       
       <% if (noMenu) { %>
         <div class="no-menu-message">
@@ -18,15 +29,15 @@
       <% } else { %>
         <div class="monthly-menu">
           <% 
-            // Group meals by date
+            // Group menu entries by date
             const mealsByDate = {};
-            meals.forEach(m => {
-              const dateObj = new Date(m.date);
+            meals.forEach(entry => {
+              const dateObj = new Date(entry.date);
               const dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
               if (!mealsByDate[dateStr]) {
                 mealsByDate[dateStr] = [];
               }
-              mealsByDate[dateStr].push(m);
+              mealsByDate[dateStr].push(entry);
             });
           %>
           
@@ -34,23 +45,27 @@
             <div class="menu-day">
               <h3><%= dateStr %></h3>
               <div class="meals-for-day">
-                <% mealsByDate[dateStr].forEach(m => { %>
-                  <% if (m.meal) { %>
-                    <div class="meal-card">
-                      <a href="/meals/<%= m.meal._id %>">
-                        <img src="<%= m.meal.img %>" alt="<%= m.meal.title %>" class="meal-thumbnail" />
-                        <h4><%= m.meal.title %></h4>
-                        <% if (m.meal.diet && m.meal.diet.length > 0) { %>
-                          <p class="dietary-tags">
-                            <% m.meal.diet.forEach(d => { %>
-                              <span class="tag"><%= d %></span>
-                            <% }); %>
-                          </p>
-                        <% } %>
-                        <p class="view-details">Click to view details →</p>
-                      </a>
-                    </div>
-                  <% } %>
+                <% mealsByDate[dateStr].forEach(entry => {
+                     const dayMeals = entry.meals && entry.meals.length > 0 ? entry.meals : entry.meal ? [entry.meal] : [];
+                %>
+                  <% dayMeals.forEach(meal => { %>
+                    <% if (meal) { %>
+                      <div class="meal-card">
+                        <a href="/meals/<%= meal._id %>">
+                          <img src="<%= meal.img %>" alt="<%= meal.title %>" class="meal-thumbnail" />
+                          <h4><%= meal.title %></h4>
+                          <% if (meal.diet && meal.diet.length > 0) { %>
+                            <p class="dietary-tags">
+                              <% meal.diet.forEach(d => { %>
+                                <span class="tag"><%= d %></span>
+                              <% }); %>
+                            </p>
+                          <% } %>
+                          <p class="view-details">Click to view details →</p>
+                        </a>
+                      </div>
+                    <% } %>
+                  <% }); %>
                 <% }); %>
               </div>
             </div>
