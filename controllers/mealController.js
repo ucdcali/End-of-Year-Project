@@ -23,7 +23,7 @@ export const homePage = async (req, res) => {
             },
           },
         },
-      }).populate("meals1.meal, meals2.meal");
+      }).populate([meals1.meal, meals2.meal]);
  
     if (!menu) {
       return res.render('index', {

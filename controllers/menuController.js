@@ -11,7 +11,9 @@ export const displayMonthlyMenu = async (req, res) => {
         const menu = await Menu.findOne({
           month: month,
           year: year,
-        }).populate("meals1.meal, meals2.meal");
+        })
+          .populate("meals.meals")
+          .populate("meals.meal");
         
         if (!menu) {
             return res.render("menu", {
@@ -33,10 +35,11 @@ export const displayMonthlyMenu = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.render('menu', {
-            noMenu: true,
-            error: error.message,
-            meals: []
+        res.render("menu", {
+          noMenu: true,
+          error: error.message,
+          meals1: [],
+          meals2: [],
         });
     }
 }
@@ -65,15 +68,20 @@ function buildMenuDays(month, year, body) {
     const meals2 = [];
 
     for (let day = 1; day <= 31; day++) {
-        const mealId = body[`meal1_day_${day}`];
-        if (!mealId) continue;
+        const mealId1 = body[`meal_day_${day}_1`];
+        const mealId2 = body[`meal_day_${day}_2`];
+        const dayMeals = [];
+
+        if (mealId1) dayMeals.push(mealId1);
+        if (mealId2) dayMeals.push(mealId2);
+        if (dayMeals.length === 0) continue;
 
         const date = new Date(year, monthIndex, day);
         if (date.getMonth() !== monthIndex) continue;
 
         meals1.push({
           date,
-          meal: mealId,
+          meals: dayMeals,
         });
     }
 for (let day = 1; day <= 31; day++) {
@@ -119,27 +127,32 @@ export const createMenu = async (req, res) => {
 
 export const editMenuPage = async (req, res, next) => {
     try {
-        const menu = await Menu.findById(req.params.id).populate(
-          "meals1.meal, meals2.meal",
-        );
+        const menu = await Menu.findById(req.params.id)
+          .populate("meals.meals")
+          .populate("meals.meal");
         if (!menu) {
-            return res.status(404).send('Menu not found');
+          return res.status(404).send("Menu not found");
         }
-
-        const allMeals = await Meal.find();
         const menuDays = Array.from({ length: 31 }, (_, index) => {
-          const day = index + 1;
-          const entry1 = menu.meals1.find(
-            (item) => new Date(item.date).getDate() === day,
-          );
-          const entry2 = menu.meals2.find(
-            (item) => new Date(item.date).getDate() === day,
-          );
-          return {
-            day,
-            meal1Id: entry1 ? String(entry1.meal._id) : "",
-            meal2Id: entry2 ? String(entry2.meal._id) : "",
-          };
+            const day = index + 1;
+            const entry = menu.meals.find(
+              (item) => new Date(item.date).getDate() === day,
+            );
+            const mealIds = [];
+
+            if (entry) {
+              if (Array.isArray(entry.meals) && entry.meals.length > 0) {
+                mealIds.push(...entry.meals.map((m) => String(m._id ?? m)));
+              } else if (entry.meal) {
+                mealIds.push(String(entry.meal._id ?? entry.meal));
+              }
+            }
+
+            return {
+              day,
+              meal1Id: mealIds[0] || "",
+              meal2Id: mealIds[1] || "",
+            };
         });
 
         res.render('editMenu', {

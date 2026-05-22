@@ -2,15 +2,17 @@ import mongoose from "mongoose";
 
 const menuMealSchema = new mongoose.Schema({
   date: Date,
-  meals: [{
+  meals: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Meal",
+    },
+  ],
+  meal: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Meal'
-  }],
-  meal:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Meal'
-  }
-})
+    ref: "Meal",
+  },
+});
 const menuSchema = new mongoose.Schema({
   meals1: [menuMealSchema],
   meals2: [menuMealSchema],
