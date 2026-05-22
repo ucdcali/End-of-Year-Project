@@ -9,27 +9,27 @@ export const displayMonthlyMenu = async (req, res) => {
         const year = req.query.year || now.getFullYear().toString();
         
         const menu = await Menu.findOne({
-            month: month,
-            year: year
-        })
-        .populate('meals.meals')
-        .populate('meals.meal');
+          month: month,
+          year: year,
+        }).populate("meals1.meal, meals2.meal");
         
         if (!menu) {
-            return res.render('menu', {
-                noMenu: true,
-                month,
-                year,
-                meals: []
+            return res.render("menu", {
+              noMenu: true,
+              month,
+              year,
+              meals1: [],
+              meals2: [],
             });
         }
 
-        res.render('menu', {
-            noMenu: false,
-            month,
-            year,
-            meals: menu.meals,
-            allMeals: menu.meals
+        res.render("menu", {
+          noMenu: false,
+          month,
+          year,
+          meals1: menu.meals1,
+          meals2: menu.meals2,
+          allMeals: menu.meals,
         });
     } catch (error) {
         console.log(error);
@@ -61,44 +61,52 @@ function getMonthIndex(monthName) {
 
 function buildMenuDays(month, year, body) {
     const monthIndex = getMonthIndex(month);
-    const meals = [];
+    const meals1 = [];
+    const meals2 = [];
 
     for (let day = 1; day <= 31; day++) {
-        const mealId1 = body[`meal_day_${day}_1`];
-        const mealId2 = body[`meal_day_${day}_2`];
-        const dayMeals = [];
-
-        if (mealId1) dayMeals.push(mealId1);
-        if (mealId2) dayMeals.push(mealId2);
-        if (dayMeals.length === 0) continue;
+        const mealId = body[`meal1_day_${day}`];
+        if (!mealId) continue;
 
         const date = new Date(year, monthIndex, day);
         if (date.getMonth() !== monthIndex) continue;
 
-        meals.push({
-            date,
-            meals: dayMeals
+        meals1.push({
+          date,
+          meal: mealId,
         });
     }
+for (let day = 1; day <= 31; day++) {
+  const mealId = body[`meal2_day_${day}`];
+  if (!mealId) continue;
 
-    return meals;
+  const date = new Date(year, monthIndex, day);
+  if (date.getMonth() !== monthIndex) continue;
+
+  meals2.push({
+    date,
+    meal: mealId,
+  });
+}
+return (meals1, meals2);
 }
 
 export const createMenu = async (req, res) => {
     try {
         const { month, year } = req.body;
-        const meals = buildMenuDays(month, year, req.body);
+        const { meals1, meals2 } = buildMenuDays(month, year, req.body);
 
         const existingMenu = await Menu.findOne({ month, year });
-
         if (existingMenu) {
-            existingMenu.meals = meals;
+            existingMenu.meals1 = meals1;
+            existingMenu.meals2 = meals2;
             await existingMenu.save();
         } else {
             await Menu.create({
-                month,
-                year,
-                meals
+              month,
+              year,
+              meals1,
+              meals2,
             });
         }
 
@@ -111,32 +119,27 @@ export const createMenu = async (req, res) => {
 
 export const editMenuPage = async (req, res, next) => {
     try {
-        const menu = await Menu.findById(req.params.id)
-            .populate('meals.meals')
-            .populate('meals.meal');
+        const menu = await Menu.findById(req.params.id).populate(
+          "meals1.meal, meals2.meal",
+        );
         if (!menu) {
             return res.status(404).send('Menu not found');
         }
 
         const allMeals = await Meal.find();
         const menuDays = Array.from({ length: 31 }, (_, index) => {
-            const day = index + 1;
-            const entry = menu.meals.find(item => new Date(item.date).getDate() === day);
-            const mealIds = [];
-
-            if (entry) {
-                if (Array.isArray(entry.meals) && entry.meals.length > 0) {
-                    mealIds.push(...entry.meals.map(m => String(m._id ?? m)));
-                } else if (entry.meal) {
-                    mealIds.push(String(entry.meal._id ?? entry.meal));
-                }
-            }
-
-            return {
-                day,
-                meal1Id: mealIds[0] || '',
-                meal2Id: mealIds[1] || ''
-            };
+          const day = index + 1;
+          const entry1 = menu.meals1.find(
+            (item) => new Date(item.date).getDate() === day,
+          );
+          const entry2 = menu.meals2.find(
+            (item) => new Date(item.date).getDate() === day,
+          );
+          return {
+            day,
+            meal1Id: entry1 ? String(entry1.meal._id) : "",
+            meal2Id: entry2 ? String(entry2.meal._id) : "",
+          };
         });
 
         res.render('editMenu', {
@@ -152,7 +155,8 @@ export const editMenuPage = async (req, res, next) => {
 export const updateMenu = async (req, res, next) => {
     try {
         const { month, year } = req.body;
-        const meals = buildMenuDays(month, year, req.body);
+        const meals1 = buildMenuDays(month, year, req.body);
+        const meals2 = buildMenuDays(month, year, req.body);
         const menu = await Menu.findById(req.params.id);
 
         if (!menu) {
@@ -161,7 +165,8 @@ export const updateMenu = async (req, res, next) => {
 
         menu.month = month;
         menu.year = year;
-        menu.meals = meals;
+        menu.meals1 = meals1;
+        menu.meals2 = meals2;
         await menu.save();
 
         res.redirect('/admin');

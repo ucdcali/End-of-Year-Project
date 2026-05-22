@@ -24,7 +24,7 @@
 
         <div class="form-group">
           <label for="year">Year:</label>
-          <input name="year" id="year" type="number" min="2020" max="2099" value="<%= menu.year %>" required />
+          <input name="year" id="year" type="number" min="2025" max="2099" value="<%= menu.year %>" required />
         </div>
 
         <div id="menu-days">
@@ -32,8 +32,8 @@
           <div class="menu-day-grid">
             <% menuDays.forEach(item => { %>
               <div class="menu-day-select">
-                <label for="meal_day_<%= item.day %>_1">Day <%= item.day %> - Meal 1</label>
-                <select name="meal_day_<%= item.day %>_1" id="meal_day_<%= item.day %>_1">
+                <label for="meal1_day_<%= item.day %>">Day <%= item.day %></label>
+                <select name="meal1_day_<%= item.day %>" id="meal1_day_<%= item.day %>">
                   <option value="">No meal</option>
                   <% allMeals.forEach(meal => { %>
                     <option value="<%= meal._id %>" <%= item.meal1Id === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
@@ -48,6 +48,12 @@
                     <option value="<%= meal._id %>" <%= item.meal2Id === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
                   <% }); %>
                 </select>
+                <select name="meal2_day_<%= item.day %>" id="meal2_day_<%= item.day %>">
+                  <option value="">No meal</option>
+                  <% allMeals.forEach(meal => { %>
+                    <option value="<%= meal._id %>" <%= item.mealId === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
+                  <% }); %>
+                  </select>
               </div>
             <% }); %>
           </div>

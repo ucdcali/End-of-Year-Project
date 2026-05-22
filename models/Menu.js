@@ -12,9 +12,10 @@ const menuMealSchema = new mongoose.Schema({
   }
 })
 const menuSchema = new mongoose.Schema({
-  meals: [menuMealSchema],
+  meals1: [menuMealSchema],
+  meals2: [menuMealSchema],
   month: String,
-  year: String
+  year: String,
 });
 
 export const Menu = mongoose.model('Menu', menuSchema);

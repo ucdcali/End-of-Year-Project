@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { Meal } from '../models/Meal.js'
 import { Menu } from '../models/Menu.js'
+import { Suggestion } from '../models/Suggestion.js'
+
 
 const DIET = ['V', 'VG', 'GF', 'DF', 'NF'];
 
@@ -14,15 +16,14 @@ export const homePage = async (req, res) => {
 
       const menu = await Menu.findOne({
         meals: {
-          $elemMatch:{
+          $elemMatch: {
             date: {
               $gte: startOfDay,
-              $lte: endOfDay
-            }
-         }
-        
-       }
-      }).populate('meals.meal');
+              $lte: endOfDay,
+            },
+          },
+        },
+      }).populate("meals1.meal, meals2.meal");
  
     if (!menu) {
       return res.render('index', {
@@ -54,11 +55,19 @@ export const homePage = async (req, res) => {
 
 export const adminPage = async (req, res, next) => {
   try {
-    const meals = await Meal.find();
+    const meals1 = await Meal.find();
+    const meals2 = await Meal.find();
     const menus = await Menu.find().sort({ year: -1, month: 1 });
+    res.render("admin", {
+      title: "Commons App",
+      meals1,
+      meals2,
+      menus,
+    const suggestions = await Suggestion.find()
 
     res.render('admin', {
       title: "Commons App",
+      suggestions,
       meals,
       menus
     });
