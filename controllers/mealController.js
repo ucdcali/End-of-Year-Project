@@ -58,18 +58,13 @@ export const adminPage = async (req, res, next) => {
     const meals1 = await Meal.find();
     const meals2 = await Meal.find();
     const menus = await Menu.find().sort({ year: -1, month: 1 });
+    const suggestions = await Suggestion.find()
     res.render("admin", {
       title: "Commons App",
       meals1,
       meals2,
       menus,
-    const suggestions = await Suggestion.find()
-
-    res.render('admin', {
-      title: "Commons App",
-      suggestions,
-      meals,
-      menus
+      suggestions
     });
   } catch (err) {
     next(err);
