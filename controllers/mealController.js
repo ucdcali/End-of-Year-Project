@@ -19,9 +19,15 @@ export const homePage = async (req, res) => {
       const currentYear = now.getFullYear().toString();
 
       const menu = await Menu.findOne({
-        month: currentMonth,
-        year: currentYear,
-      }).populate(["meals1.meal", "meals2.meal"]);
+        meals: {
+          $elemMatch: {
+            date: {
+              $gte: startOfDay,
+              $lte: endOfDay,
+            },
+          },
+        },
+      }).populate([meals1.meal, meals2.meal]);
  
     if (!menu) {
       return res.render('index', {
@@ -69,11 +75,15 @@ export const homePage = async (req, res) => {
 export const adminPage = async (req, res, next) => {
   try {
     const meals = await Meal.find();
+    const meals1 = await Meal.find();
+    const meals2 = await Meal.find();
     const menus = await Menu.find().sort({ year: -1, month: 1 });
-    const suggestions = await Suggestion.find();
+    const suggestions = await Suggestion.find()
     res.render("admin", {
       title: "Commons App",
       meals,
+      meals1,
+      meals2,
       menus,
       suggestions,
     });

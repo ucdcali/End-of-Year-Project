@@ -32,19 +32,27 @@
           <div class="menu-day-grid">
             <% menuDays.forEach(item => { %>
               <div class="menu-day-select">
-                <label>Day <%= item.day %></label>
-                <div class="meal-pair">
-                  <select name="meal1_day_<%= item.day %>" id="meal1_day_<%= item.day %>">
-                    <option value="">Meal 1 - No meal</option>
-                    <% allMeals.forEach(meal => { %>
-                      <option value="<%= meal._id %>" <%= item.meal1Id === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
-                    <% }); %>
-                  </select>
-                  <select name="meal2_day_<%= item.day %>" id="meal2_day_<%= item.day %>">
-                    <option value="">Meal 2 - No meal</option>
-                    <% allMeals.forEach(meal => { %>
-                      <option value="<%= meal._id %>" <%= item.meal2Id === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
-                    <% }); %>
+                <label for="meal_day_<%= item.day %>_1">Day <%= item.day %> - Meal 1</label>
+                <select name="meal_day_<%= item.day %>_1" id="meal_day_<%= item.day %>_1">
+                  <option value="">No meal</option>
+                  <% allMeals.forEach(meal => { %>
+                    <option value="<%= meal._id %>" <%= item.meal1Id === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="menu-day-select">
+                <label for="meal_day_<%= item.day %>_2">Day <%= item.day %> - Meal 2</label>
+                <select name="meal_day_<%= item.day %>_2" id="meal_day_<%= item.day %>_2">
+                  <option value="">No meal</option>
+                  <% allMeals.forEach(meal => { %>
+                    <option value="<%= meal._id %>" <%= item.meal2Id === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
+                  <% }); %>
+                </select>
+                <select name="meal2_day_<%= item.day %>" id="meal2_day_<%= item.day %>">
+                  <option value="">No meal</option>
+                  <% allMeals.forEach(meal => { %>
+                    <option value="<%= meal._id %>" <%= item.mealId === String(meal._id) ? 'selected' : '' %>><%= meal.title %></option>
+                  <% }); %>
                   </select>
                 </div>
               </div>

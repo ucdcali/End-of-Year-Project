@@ -8,7 +8,18 @@
     <%- include('navbar') %>
     
     <main class="container">
-      <h1>Monthly Menu - <%= month.charAt(0).toUpperCase() + month.slice(1) %> <%= year %></h1>      
+      <% const monthNames = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+         const currentMonthIndex = monthNames.indexOf(month.toLowerCase());
+         const prevMonthIndex = (currentMonthIndex + 11) % 12;
+         const nextMonthIndex = (currentMonthIndex + 1) % 12;
+         const prevYear = prevMonthIndex === 11 ? Number(year) - 1 : Number(year);
+         const nextYear = nextMonthIndex === 0 ? Number(year) + 1 : Number(year);
+      %>
+      <div class="menu-navigation">
+        <a class="menu-nav-link" href="/menu?month=<%= monthNames[prevMonthIndex] %>&year=<%= prevYear %>">&larr; Previous month</a>
+        <h1>Monthly Menu - <%= month.charAt(0).toUpperCase() + month.slice(1) %> <%= year %></h1>
+        <a class="menu-nav-link" href="/menu?month=<%= monthNames[nextMonthIndex] %>&year=<%= nextYear %>">Next month &rarr;</a>
+      </div>
       <% if (noMenu) { %>
         <div class="no-menu-message">
           <p>No menu available for <%= month.charAt(0).toUpperCase() + month.slice(1) %> <%= year %>.</p>
@@ -54,12 +65,9 @@
                       </div>
                     <% } %>
                   <% }); %>
-                <% }); %>
+                    <% }); %>
               </div>
             </div>
-          <% }); %>
-        </div>
-      <% } %>
     </main>
   </body>
 </html>
