@@ -2,16 +2,16 @@ import { Menu } from '../models/Menu.js'
 import { Meal } from '../models/Meal.js'
 
 export const displayMonthlyMenu = async (req, res) => {
+    // Get current month and year or from query params
+    const now = new Date();
+    const month = req.query.month || now.toLocaleString('default', { month: 'long' }).toLowerCase();
+    const year = req.query.year || now.getFullYear().toString();
+
     try {
-        // Get current month and year or from query params
-        const now = new Date();
-        const month = req.query.month || now.toLocaleString('default', { month: 'long' }).toLowerCase();
-        const year = req.query.year || now.getFullYear().toString();
-        
         const menu = await Menu.findOne({
           month: month,
           year: year,
-        }).populate("meals1.meal, meals2.meal");
+        }).populate(["meals1.meal", "meals2.meal"]);
         
         if (!menu) {
             return res.render("menu", {
@@ -27,16 +27,17 @@ export const displayMonthlyMenu = async (req, res) => {
           noMenu: false,
           month,
           year,
-          meals1: menu.meals1,
-          meals2: menu.meals2,
-          allMeals: menu.meals,
+          meals: [...menu.meals1, ...menu.meals2],
         });
     } catch (error) {
         console.log(error);
         res.render('menu', {
             noMenu: true,
             error: error.message,
-            meals: []
+            month,
+            year,
+            meals1: [],
+            meals2: [],
         });
     }
 }
@@ -88,7 +89,7 @@ for (let day = 1; day <= 31; day++) {
     meal: mealId,
   });
 }
-return (meals1, meals2);
+return { meals1, meals2 };
 }
 
 export const createMenu = async (req, res) => {
@@ -119,9 +120,9 @@ export const createMenu = async (req, res) => {
 
 export const editMenuPage = async (req, res, next) => {
     try {
-        const menu = await Menu.findById(req.params.id).populate(
-          "meals1.meal, meals2.meal",
-        );
+        const menu = await Menu.findById(req.params.id).populate([
+          "meals1.meal", "meals2.meal",
+        ]);
         if (!menu) {
             return res.status(404).send('Menu not found');
         }
@@ -155,8 +156,7 @@ export const editMenuPage = async (req, res, next) => {
 export const updateMenu = async (req, res, next) => {
     try {
         const { month, year } = req.body;
-        const meals1 = buildMenuDays(month, year, req.body);
-        const meals2 = buildMenuDays(month, year, req.body);
+        const { meals1, meals2 } = buildMenuDays(month, year, req.body);
         const menu = await Menu.findById(req.params.id);
 
         if (!menu) {

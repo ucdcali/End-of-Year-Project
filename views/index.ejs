@@ -15,35 +15,36 @@
       <div class="no-meal-message">
         <p>No meal scheduled for today.</p>
       </div>
-    <% } else if (mealInfo) { %>
-      <section class="meal-display">
-        <h2><%= mealInfo.title %></h2>
-        <img src="<%= mealInfo.img %>" alt="<%= mealInfo.title %>" class="meal-image" />
-        
-        <% if (mealInfo.description) { %>
-          <p class="meal-description"><%= mealInfo.description %></p>
-        <% } %>
-        
-        <% if (mealInfo.diet && mealInfo.diet.length > 0) { %>
-          <div class="dietary-info">
-            <p><strong>Dietary Info:</strong></p>
-            <ul>
-              <% mealInfo.diet.forEach(d => { %>
-                <li>
-                  <% if (d === 'V') { %>V (Vegan)
-                  <% } else if (d === 'VG') { %>VG (Vegetarian)
-                  <% } else if (d === 'GF') { %>GF (Gluten-Free)
-                  <% } else if (d === 'DF') { %>DF (Dairy-Free)
-                  <% } else if (d === 'NF') { %>NF (Nut-Free)
-                  <% } %>
-                </li>
-              <% }); %>
-            </ul>
-          </div>
-        <% } %>
-        
-        <a href="/menu" class="btn btn-primary">View Full Monthly Menu</a>
-      </section>
+    <% } else if (meals && meals.length > 0) { %>
+      <% meals.forEach((mealInfo, index) => { %>
+        <section class="meal-display">
+          <h2><%= index === 0 ? 'Meal 1:' : 'Meal 2:' %> <%= mealInfo.title %></h2>
+          <img src="<%= mealInfo.img %>" alt="<%= mealInfo.title %>" class="meal-image" />
+          
+          <% if (mealInfo.description) { %>
+            <p class="meal-description"><%= mealInfo.description %></p>
+          <% } %>
+          
+          <% if (mealInfo.diet && mealInfo.diet.length > 0) { %>
+            <div class="dietary-info">
+              <p><strong>Dietary Info:</strong></p>
+              <ul>
+                <% mealInfo.diet.forEach(d => { %>
+                  <li>
+                    <% if (d === 'V') { %>V (Vegan)
+                    <% } else if (d === 'VG') { %>VG (Vegetarian)
+                    <% } else if (d === 'GF') { %>GF (Gluten-Free)
+                    <% } else if (d === 'DF') { %>DF (Dairy-Free)
+                    <% } else if (d === 'NF') { %>NF (Nut-Free)
+                    <% } %>
+                  </li>
+                <% }); %>
+              </ul>
+            </div>
+          <% } %>
+        </section>
+      <% }); %>
+      <a href="/menu" class="btn btn-primary">View Full Monthly Menu</a>
     <% } %>
     <form action="/suggestion" method="post" class="suggestion-form">
 

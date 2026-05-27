@@ -14,39 +14,52 @@ export const homePage = async (req, res) => {
       const endOfDay = new Date();
       endOfDay.setHours(23, 59, 59, 999);
 
+      const now = new Date();
+      const currentMonth = now.toLocaleString('default', { month: 'long' }).toLowerCase();
+      const currentYear = now.getFullYear().toString();
+
       const menu = await Menu.findOne({
-        meals: {
-          $elemMatch: {
-            date: {
-              $gte: startOfDay,
-              $lte: endOfDay,
-            },
-          },
-        },
-      }).populate("meals1.meal, meals2.meal");
+        month: currentMonth,
+        year: currentYear,
+      }).populate(["meals1.meal", "meals2.meal"]);
  
     if (!menu) {
       return res.render('index', {
-        mealInfo: null,
+        meals: [],
         noMealToday: true
       });
     }
     
-    const todaysMeal = menu.meals.find(m =>
-      m.date >= startOfDay && m.date <= endOfDay
-    )
+    // Check both meals1 and meals2 for today's date
+    const todaysMeal1 = menu.meals1.find(m =>
+      new Date(m.date) >= startOfDay && new Date(m.date) <= endOfDay
+    );
+    
+    const todaysMeal2 = menu.meals2.find(m =>
+      new Date(m.date) >= startOfDay && new Date(m.date) <= endOfDay
+    );
 
-    const mealInfo = todaysMeal.meal;
+    // Collect both meals if they exist
+    const meals = [];
+    if (todaysMeal1?.meal) meals.push(todaysMeal1.meal);
+    if (todaysMeal2?.meal) meals.push(todaysMeal2.meal);
+
+    if (meals.length === 0) {
+      return res.render('index', {
+        meals: [],
+        noMealToday: true
+      });
+    }
 
     res.render('index', {
-      mealInfo,
+      meals,
       noMealToday: false
     })
     }
     catch (err) {
         console.log(err)
         res.render('index', {
-          mealInfo: null,
+          meals: [],
           noMealToday: true,
           error: err.message
         })
@@ -55,21 +68,14 @@ export const homePage = async (req, res) => {
 
 export const adminPage = async (req, res, next) => {
   try {
-    const meals1 = await Meal.find();
-    const meals2 = await Meal.find();
+    const meals = await Meal.find();
     const menus = await Menu.find().sort({ year: -1, month: 1 });
+    const suggestions = await Suggestion.find();
     res.render("admin", {
       title: "Commons App",
-      meals1,
-      meals2,
-      menus,
-    const suggestions = await Suggestion.find()
-
-    res.render('admin', {
-      title: "Commons App",
-      suggestions,
       meals,
-      menus
+      menus,
+      suggestions,
     });
   } catch (err) {
     next(err);
